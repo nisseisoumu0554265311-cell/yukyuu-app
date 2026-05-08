@@ -9,21 +9,17 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Hiragino Sans','Yu Gothic',sans-serif;font-size:14px;color:#1a1a1a;background:#f5f5f5;min-height:100vh}
 .container{max-width:720px;margin:0 auto;padding:24px 16px}
-h1{font-size:18px;font-weight:600;margin-bottom:20px}
 
-/* ログイン */
-#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;gap:16px}
-#login-screen h2{font-size:20px;font-weight:600}
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px}
+#login-screen h2{font-size:22px;font-weight:600}
 #login-screen p{color:#666;font-size:13px}
 
-/* トップバー */
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.topbar h1{margin:0}
+.topbar h1{font-size:18px;font-weight:600}
 .user-info{display:flex;align-items:center;gap:10px;font-size:13px;color:#555}
 .user-info img{width:28px;height:28px;border-radius:50%}
 .btn-logout{background:none;border:1px solid #ddd;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#555}
 
-/* ロール切替 */
 .role-switch{display:flex;align-items:center;gap:8px;font-size:13px;color:#555;margin-bottom:20px}
 .toggle{position:relative;width:44px;height:24px;display:inline-block}
 .toggle input{display:none}
@@ -32,33 +28,31 @@ h1{font-size:18px;font-weight:600;margin-bottom:20px}
 input:checked+.slider-t{background:#1D9E75}
 input:checked+.slider-t:before{transform:translateX(20px)}
 
-/* タブ */
 .tabs{display:flex;gap:4px;border-bottom:1px solid #ddd;margin-bottom:20px}
 .tab{padding:8px 18px;font-size:14px;border:none;background:none;color:#888;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit}
 .tab.active{color:#1a1a1a;border-bottom-color:#1a1a1a;font-weight:500}
 
-/* カード */
 .card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:20px;margin-bottom:16px}
 .card h3{font-size:15px;font-weight:500;margin-bottom:14px}
 
-/* フォーム */
 .form-row{margin-bottom:12px}
 label{display:block;font-size:12px;color:#666;margin-bottom:4px}
 input,select,textarea{width:100%;padding:8px 10px;font-size:14px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#1a1a1a;font-family:inherit}
 input:focus,select:focus,textarea:focus{outline:none;border-color:#1D9E75}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
 .btn{padding:8px 18px;border-radius:6px;font-size:14px;cursor:pointer;font-family:inherit}
 .btn-primary{background:#1a1a1a;color:#fff;border:none}
 .btn-primary:hover{background:#333}
 .btn-outline{background:none;border:1px solid #ddd;color:#1a1a1a}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:6px;cursor:pointer;font-family:inherit}
+.btn-danger{background:none;border:1px solid #f0a0a0;color:#c00;border-radius:6px;padding:4px 8px;font-size:12px;cursor:pointer}
 
-/* バッジ */
 .badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:500}
 .badge-pending{background:#FAEEDA;color:#633806}
 .badge-approved{background:#EAF3DE;color:#27500A}
 .badge-rejected{background:#FCEBEB;color:#791F1F}
 
-/* リスト */
 .list-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0}
 .list-item:last-child{border-bottom:none}
 .avatar{width:34px;height:34px;border-radius:50%;background:#e8f4fd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#2563eb;flex-shrink:0}
@@ -69,13 +63,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#1D9E75}
 .btn-approve{background:none;border:1px solid #1D9E75;color:#0F6E56;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:inherit}
 .btn-reject{background:none;border:1px solid #D85A30;color:#993C1D;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:inherit}
 
-/* 残高 */
 .balance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
 .bal-card{border-radius:8px;padding:12px;text-align:center}
 .bal-label{font-size:11px;color:#888;margin-bottom:4px}
 .bal-val{font-size:20px;font-weight:500}
 
-/* カレンダー */
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
 .cal-header{text-align:center;font-size:11px;color:#888;padding:4px 0}
 .cal-day{text-align:center;padding:5px 2px;font-size:12px;border-radius:4px}
@@ -89,13 +81,15 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#1D9E75}
 .empty{text-align:center;color:#bbb;font-size:13px;padding:2rem 0}
 .section{display:none}.section.active{display:block}
 
-/* メール送信状況 */
 .mail-status{font-size:12px;padding:6px 12px;border-radius:6px;margin-top:8px;display:none}
 .mail-status.success{background:#EAF3DE;color:#27500A}
 .mail-status.error{background:#FCEBEB;color:#791F1F}
 
-/* テストユーザー警告 */
-.warn-box{background:#fff8e1;border:1px solid #ffd54f;border-radius:8px;padding:10px 14px;font-size:12px;color:#5d4037;margin-bottom:16px}
+.tag{display:inline-flex;align-items:center;gap:4px;background:#f0f0f0;border-radius:20px;padding:3px 10px;font-size:12px;margin:2px}
+.tag button{background:none;border:none;cursor:pointer;color:#888;font-size:14px;line-height:1;padding:0}
+
+.member-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;min-height:32px}
+.settings-saved{font-size:12px;color:#27500A;margin-top:8px;display:none}
 </style>
 </head>
 <body>
@@ -103,7 +97,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#1D9E75}
 <!-- ログイン画面 -->
 <div id="login-screen">
   <h2>有給申請アプリ</h2>
-  <p>Googleアカウントでログインしてください</p>
+  <p>管理者アカウントでログインしてください</p>
   <div id="g_id_onload"
     data-client_id="248299412779-a34l0kevs4urfrg3468u3louv1n9tspf.apps.googleusercontent.com"
     data-callback="handleCredentialResponse"
@@ -124,10 +118,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#1D9E75}
     </div>
   </div>
 
-  <div class="warn-box" id="test-warn" style="display:none">
-    ⚠️ このアプリはテストモードです。承認者へのメール通知を受け取るには、Google Cloudでテストユーザーとして登録が必要です。
-  </div>
-
   <div class="role-switch">
     <span>申請者</span>
     <label class="toggle"><input type="checkbox" id="role-toggle" onchange="switchRole()"><span class="slider-t"></span></label>
@@ -138,6 +128,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#1D9E75}
     <button class="tab active" onclick="showTab('apply',this)">申請</button>
     <button class="tab" onclick="showTab('list',this)">一覧</button>
     <button class="tab" onclick="showTab('calendar',this)">カレンダー</button>
+    <button class="tab" onclick="showTab('settings',this)">設定</button>
   </div>
 
   <!-- 申請タブ -->
@@ -146,12 +137,14 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#1D9E75}
       <div class="card">
         <h3>申請フォーム</h3>
         <div class="form-row">
-          <label>申請者名</label>
-          <input type="text" id="applicant">
+          <label>申請者</label>
+          <select id="applicant-select" onchange="onApplicantChange()">
+            <option value="">-- 申請者を選択 --</option>
+          </select>
         </div>
         <div class="form-row">
-          <label>承認者のメールアドレス</label>
-          <input type="email" id="approver-email" placeholder="承認者のメールアドレス">
+          <label>申請者メールアドレス</label>
+          <input type="email" id="applicant-email" placeholder="自動入力されます" readonly style="background:#f8f8f8">
         </div>
         <div class="form-row">
           <label>休暇種別</label>
@@ -183,7 +176,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#1D9E75}
           <textarea rows="2" id="reason" placeholder="例：私用のため" style="resize:vertical"></textarea>
         </div>
         <div id="deduction-preview" class="info-box" style="display:none"></div>
-        <div style="display:flex;gap:8px;margin-top:14px;align-items:center;flex-wrap:wrap">
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
           <button class="btn btn-primary" onclick="submitRequest()">申請する（メール送信）</button>
           <button class="btn btn-outline" onclick="clearForm()">クリア</button>
         </div>
@@ -213,7 +206,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#1D9E75}
   <!-- 一覧タブ -->
   <div id="sec-list" class="section">
     <div id="list-employee" class="card">
-      <h3>自分の申請履歴</h3>
+      <h3>申請履歴</h3>
       <div id="my-requests"><div class="empty">申請がありません</div></div>
     </div>
     <div id="list-manager" class="card" style="display:none">
@@ -234,8 +227,47 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:#1D9E75}
     </div>
   </div>
 
-</div><!-- /container -->
-</div><!-- /main-screen -->
+  <!-- 設定タブ -->
+  <div id="sec-settings" class="section">
+
+    <!-- 承認者設定 -->
+    <div class="card">
+      <h3>承認者メールアドレス</h3>
+      <div class="form-row">
+        <label>承認者のメールアドレス（申請時に通知が届きます）</label>
+        <input type="email" id="setting-approver" placeholder="approver@example.com">
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="saveApprover()">保存</button>
+      <div id="approver-saved" class="settings-saved">✅ 保存しました</div>
+    </div>
+
+    <!-- 関係者設定 -->
+    <div class="card">
+      <h3>関係者メールアドレス（承認時に通知）</h3>
+      <div class="row2" style="margin-bottom:8px">
+        <input type="email" id="cc-email-input" placeholder="cc@example.com">
+        <button class="btn btn-outline btn-sm" onclick="addCcEmail()">追加</button>
+      </div>
+      <div class="member-list" id="cc-list"></div>
+      <div id="cc-saved" class="settings-saved">✅ 保存しました</div>
+    </div>
+
+    <!-- 社員リスト -->
+    <div class="card">
+      <h3>社員リスト</h3>
+      <div class="row3" style="margin-bottom:8px">
+        <input type="text" id="emp-name-input" placeholder="氏名">
+        <input type="email" id="emp-email-input" placeholder="メールアドレス">
+        <button class="btn btn-outline btn-sm" onclick="addEmployee()">追加</button>
+      </div>
+      <div id="emp-list"></div>
+      <div id="emp-saved" class="settings-saved">✅ 保存しました</div>
+    </div>
+
+  </div>
+
+</div>
+</div>
 
 <script>
 const CLIENT_ID = '248299412779-a34l0kevs4urfrg3468u3louv1n9tspf.apps.googleusercontent.com';
@@ -248,25 +280,50 @@ const PLACEHOLDERS = {
 };
 
 let accessToken = null;
-let userEmail = '';
-let userName = '';
 
-let balance = { totalDays: 10, usedHours: 0, hourPoolUsed: 0 };
+// 設定（localStorage）
+let settings = {
+  approver: '',
+  ccList: [],
+  employees: [], // [{name, email}]
+};
+
+// 残高・申請データ（localStorage）
+let balances = {}; // {email: {totalDays, usedHours, hourPoolUsed}}
 let requests = [];
-let myRequests = [];
 let nextId = 1;
 let isManager = false;
+let currentApplicantEmail = '';
+
+function loadSettings(){
+  const s = localStorage.getItem('yukyuu_settings');
+  if(s) settings = JSON.parse(s);
+  const r = localStorage.getItem('yukyuu_requests');
+  if(r){ const d=JSON.parse(r); requests=d.requests||[]; nextId=d.nextId||1; }
+  const b = localStorage.getItem('yukyuu_balances');
+  if(b) balances = JSON.parse(b);
+}
+
+function saveSettingsData(){
+  localStorage.setItem('yukyuu_settings', JSON.stringify(settings));
+}
+
+function saveRequestsData(){
+  localStorage.setItem('yukyuu_requests', JSON.stringify({requests, nextId}));
+  localStorage.setItem('yukyuu_balances', JSON.stringify(balances));
+}
+
+function getBalance(email){
+  if(!balances[email]) balances[email] = {totalDays:10, usedHours:0, hourPoolUsed:0};
+  return balances[email];
+}
 
 // ---- Google OAuth ----
 function handleCredentialResponse(response) {
   const payload = parseJwt(response.credential);
-  userName = payload.name;
-  userEmail = payload.email;
-  document.getElementById('user-name').textContent = userName;
+  document.getElementById('user-name').textContent = payload.name;
   document.getElementById('user-avatar').src = payload.picture || '';
-  document.getElementById('applicant').value = userName;
 
-  // アクセストークン取得
   const client = google.accounts.oauth2.initTokenClient({
     client_id: CLIENT_ID,
     scope: 'https://www.googleapis.com/auth/gmail.send',
@@ -274,7 +331,10 @@ function handleCredentialResponse(response) {
       accessToken = tokenResponse.access_token;
       document.getElementById('login-screen').style.display = 'none';
       document.getElementById('main-screen').style.display = 'block';
+      loadSettings();
       initDates();
+      renderSettings();
+      refreshApplicantSelect();
       renderBalance();
       renderList();
       renderCalendar();
@@ -295,24 +355,123 @@ function logout() {
   document.getElementById('login-screen').style.display = 'flex';
 }
 
+// ---- 設定 ----
+function renderSettings(){
+  document.getElementById('setting-approver').value = settings.approver;
+  renderCcList();
+  renderEmpList();
+}
+
+function saveApprover(){
+  settings.approver = document.getElementById('setting-approver').value.trim();
+  saveSettingsData();
+  flash('approver-saved');
+}
+
+function addCcEmail(){
+  const v = document.getElementById('cc-email-input').value.trim();
+  if(!v) return;
+  if(!settings.ccList.includes(v)) settings.ccList.push(v);
+  saveSettingsData();
+  document.getElementById('cc-email-input').value='';
+  renderCcList();
+  flash('cc-saved');
+}
+
+function removeCc(email){
+  settings.ccList = settings.ccList.filter(e=>e!==email);
+  saveSettingsData();
+  renderCcList();
+}
+
+function renderCcList(){
+  document.getElementById('cc-list').innerHTML = settings.ccList.map(e=>
+    `<span class="tag">${e}<button onclick="removeCc('${e}')">×</button></span>`
+  ).join('') || '<span style="font-size:12px;color:#aaa">まだ追加されていません</span>';
+}
+
+function addEmployee(){
+  const name = document.getElementById('emp-name-input').value.trim();
+  const email = document.getElementById('emp-email-input').value.trim();
+  if(!name||!email){ alert('氏名とメールアドレスを入力してください'); return; }
+  if(settings.employees.find(e=>e.email===email)){ alert('既に登録されています'); return; }
+  settings.employees.push({name, email});
+  saveSettingsData();
+  document.getElementById('emp-name-input').value='';
+  document.getElementById('emp-email-input').value='';
+  renderEmpList();
+  refreshApplicantSelect();
+  flash('emp-saved');
+}
+
+function removeEmployee(email){
+  settings.employees = settings.employees.filter(e=>e.email!==email);
+  saveSettingsData();
+  renderEmpList();
+  refreshApplicantSelect();
+}
+
+function renderEmpList(){
+  const el = document.getElementById('emp-list');
+  if(settings.employees.length===0){ el.innerHTML='<div style="font-size:12px;color:#aaa;padding:8px 0">まだ登録されていません</div>'; return; }
+  el.innerHTML = settings.employees.map(e=>`
+    <div class="list-item">
+      <div class="avatar">${e.name.substring(0,2)}</div>
+      <div class="meta">
+        <div class="name">${e.name}</div>
+        <div class="dates">${e.email}</div>
+      </div>
+      <button class="btn-danger" onclick="removeEmployee('${e.email}')">削除</button>
+    </div>`).join('');
+}
+
+function refreshApplicantSelect(){
+  const sel = document.getElementById('applicant-select');
+  sel.innerHTML = '<option value="">-- 申請者を選択 --</option>';
+  settings.employees.forEach(e=>{
+    const opt = document.createElement('option');
+    opt.value = e.email;
+    opt.textContent = e.name;
+    sel.appendChild(opt);
+  });
+}
+
+function onApplicantChange(){
+  const email = document.getElementById('applicant-select').value;
+  currentApplicantEmail = email;
+  document.getElementById('applicant-email').value = email;
+  renderBalance();
+  updatePreview();
+}
+
+function flash(id){
+  const el = document.getElementById(id);
+  el.style.display='block';
+  setTimeout(()=>el.style.display='none', 2000);
+}
+
 // ---- 残高 ----
-function remainHours(){ return balance.totalDays * 8 - balance.usedHours; }
-function hourPoolRemain(){ return 40 - balance.hourPoolUsed; }
+function remainHours(){
+  const b = getBalance(currentApplicantEmail);
+  return b.totalDays * 8 - b.usedHours;
+}
+
 function fmtBalance(h){
-  const d = Math.floor(h/8), hr = h%8;
+  const d=Math.floor(h/8), hr=h%8;
   if(hr===0) return d+'日';
   if(d===0) return hr+'時間';
   return d+'日 + '+hr+'時間';
 }
 
 function renderBalance(){
-  const remH = remainHours();
-  const usedH = balance.usedHours;
+  const b = getBalance(currentApplicantEmail);
+  const remH = b.totalDays*8 - b.usedHours;
+  const usedH = b.usedHours;
   const usedStr = usedH%8===0 ? Math.floor(usedH/8)+'日' : Math.floor(usedH/8)+'日 + '+usedH%8+'時間';
   document.getElementById('balance-display').innerHTML = `
     <div class="bal-card" style="background:#f8f8f8">
       <div class="bal-label">付与日数</div>
-      <div class="bal-val">${balance.totalDays}日</div>
+      <div class="bal-val">${b.totalDays}日</div>
     </div>
     <div class="bal-card" style="background:#f8f8f8">
       <div class="bal-label">使用済み</div>
@@ -322,9 +481,9 @@ function renderBalance(){
       <div class="bal-label" style="color:#3B6D11">残高</div>
       <div class="bal-val" style="color:#27500A;font-size:16px">${fmtBalance(remH)}</div>
     </div>`;
-  const pr = hourPoolRemain();
+  const pr = 40 - b.hourPoolUsed;
   document.getElementById('hour-pool-text').textContent = pr+'時間 / 40時間';
-  document.getElementById('hour-pool-bar').style.width = Math.round(pr/40*100)+'%';
+  document.getElementById('hour-pool-bar').style.width = Math.round(Math.max(0,pr)/40*100)+'%';
 }
 
 // ---- フォーム ----
@@ -348,7 +507,7 @@ function onTypeChange(){
 function clampHours(){
   const el = document.getElementById('hour-count');
   const warn = document.getElementById('hour-warn');
-  if(parseInt(el.value) >= 4){ warn.style.display='block'; el.value=3; }
+  if(parseInt(el.value)>=4){ warn.style.display='block'; el.value=3; }
   else { warn.style.display='none'; }
   updatePreview();
 }
@@ -356,16 +515,18 @@ function clampHours(){
 function updatePreview(){
   const t = document.getElementById('leave-type').value;
   const box = document.getElementById('deduction-preview');
-  let msg = '';
+  const b = getBalance(currentApplicantEmail);
+  const remH = b.totalDays*8 - b.usedHours;
+  let msg='';
   if(t==='full'){
     const s=document.getElementById('start-date').value, e=document.getElementById('end-date').value;
-    if(s&&e&&s<=e){ const d=diffDays(s,e); msg=`${d}日消費 → 残: ${fmtBalance(Math.max(0,remainHours()-d*8))}`; }
+    if(s&&e&&s<=e){ const d=diffDays(s,e); msg=`${d}日消費 → 残: ${fmtBalance(Math.max(0,remH-d*8))}`; }
   } else if(t==='half-am'||t==='half-pm'){
-    msg=`半日（4時間）消費 → 残: ${fmtBalance(Math.max(0,remainHours()-4))}`;
+    msg=`半日（4時間）消費 → 残: ${fmtBalance(Math.max(0,remH-4))}`;
   } else {
     const h=parseInt(document.getElementById('hour-count').value)||1;
-    msg=`${h}時間消費 → 残: ${fmtBalance(Math.max(0,remainHours()-h))}`;
-    if(balance.hourPoolUsed+h>40) msg+=' ⚠ 時間休上限超過';
+    msg=`${h}時間消費 → 残: ${fmtBalance(Math.max(0,remH-h))}`;
+    if(b.hourPoolUsed+h>40) msg+=' ⚠ 時間休上限超過';
   }
   if(msg){ box.style.display='block'; box.textContent='📋 '+msg; }
   else { box.style.display='none'; }
@@ -374,21 +535,28 @@ function updatePreview(){
 function diffDays(s,e){ return Math.round((new Date(e)-new Date(s))/86400000)+1; }
 
 function clearForm(){
+  document.getElementById('applicant-select').value='';
+  document.getElementById('applicant-email').value='';
+  currentApplicantEmail='';
   document.getElementById('reason').value='';
   document.getElementById('hour-count').value=1;
   document.getElementById('deduction-preview').style.display='none';
   document.getElementById('mail-status').style.display='none';
+  renderBalance();
 }
 
 // ---- 申請送信 ----
 async function submitRequest(){
-  const name = document.getElementById('applicant').value.trim() || userName;
-  const approverEmail = document.getElementById('approver-email').value.trim();
+  const applicantEmail = currentApplicantEmail;
+  const applicantName = document.getElementById('applicant-select').options[document.getElementById('applicant-select').selectedIndex]?.text || '';
+  if(!applicantEmail){ alert('申請者を選択してください'); return; }
+  if(!settings.approver){ alert('設定タブで承認者メールアドレスを登録してください'); return; }
+
   const t = document.getElementById('leave-type').value;
   const reason = document.getElementById('reason').value.trim();
-  const init = name.replace(/\s/g,'').substring(0,2);
-
-  if(!approverEmail){ alert('承認者のメールアドレスを入力してください'); return; }
+  const init = applicantName.substring(0,2);
+  const b = getBalance(applicantEmail);
+  const remH = b.totalDays*8 - b.usedHours;
 
   let date,end,days,hours,typeLabel;
   if(t==='full'){
@@ -405,99 +573,42 @@ async function submitRequest(){
     if(!date){ alert('日付を入力してください'); return; }
     const h=parseInt(document.getElementById('hour-count').value)||1;
     if(h<1||h>3){ alert('時間休は1〜3時間で指定してください'); return; }
-    if(balance.hourPoolUsed+h>40){ alert('時間休の上限（40時間）を超えます'); return; }
-    if(h>remainHours()){ alert('残有給が不足しています'); return; }
+    if(b.hourPoolUsed+h>40){ alert('時間休の上限（40時間）を超えます'); return; }
+    if(h>remH){ alert('残有給が不足しています'); return; }
     days=0; hours=h; typeLabel=h+'時間休';
   }
-  if(hours>remainHours()){ alert('残有給が不足しています'); return; }
+  if(hours>remH){ alert('残有給が不足しています'); return; }
 
-  const req = {id:nextId++,name,initials:init,date,end,type:t,days,hours,reason,status:'pending',typeLabel,approverEmail};
-  myRequests.unshift(req);
-  requests.unshift({...req});
+  const req = {id:nextId++, name:applicantName, initials:init, email:applicantEmail, date, end, type:t, days, hours, reason, status:'pending', typeLabel};
+  requests.unshift(req);
+  saveRequestsData();
 
-  // メール送信
-  const subject = `【有給申請】${name} さんから申請が届いています`;
-  const body = `${name} さんから有給申請が届きました。\n\n` +
-    `種別：${typeLabel}\n` +
-    `期間：${date}${end!==date?' 〜 '+end:''}\n` +
-    `理由：${reason||'記載なし'}\n\n` +
-    `アプリにログインして承認・却下してください。\n` +
-    `https://nisseisoumu0554265311-cell.github.io/yukyuu-app/`;
-
-  await sendGmail(approverEmail, subject, body);
-  renderList(); renderBalance(); updatePreview();
+  // 承認者へメール
+  const subject = `【有給申請】${applicantName} さんから申請が届いています`;
+  const body = `${applicantName} さんから有給申請が届きました。\n\n種別：${typeLabel}\n期間：${date}${end!==date?' 〜 '+end:''}\n理由：${reason||'記載なし'}\n\nアプリにログインして承認・却下してください。\nhttps://nisseisoumu0554265311-cell.github.io/yukyuu-app/`;
+  await sendGmail(settings.approver, subject, body);
+  renderList(); renderBalance();
 }
 
 // ---- Gmail送信 ----
 async function sendGmail(to, subject, body){
   const statusEl = document.getElementById('mail-status');
-  statusEl.style.display = 'none';
-
   if(!accessToken){ showMailStatus('error','ログインが必要です'); return; }
-
-  const message = [`To: ${to}`, `Subject: =?UTF-8?B?${btoa(unescape(encodeURIComponent(subject)))}?=`, 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8', '', body].join('\n');
+  const message = [`To: ${to}`,`Subject: =?UTF-8?B?${btoa(unescape(encodeURIComponent(subject)))}?=`,'MIME-Version: 1.0','Content-Type: text/plain; charset=UTF-8','',body].join('\n');
   const encoded = btoa(unescape(encodeURIComponent(message))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
-
   try {
-    const res = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer '+accessToken, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ raw: encoded })
+    const res = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send',{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+accessToken,'Content-Type':'application/json'},
+      body:JSON.stringify({raw:encoded})
     });
-    if(res.ok){
-      showMailStatus('success', '✅ 申請を提出し、承認者にメールを送信しました');
-    } else {
-      const err = await res.json();
-      showMailStatus('error', '⚠️ メール送信失敗：'+( err.error?.message||'不明なエラー'));
-    }
-  } catch(e){
-    showMailStatus('error', '⚠️ 通信エラー：'+e.message);
-  }
-}
-
-function showMailStatus(type, msg){
-  const el = document.getElementById('mail-status');
-  el.className = 'mail-status '+type;
-  el.textContent = msg;
-  el.style.display = 'block';
-}
-
-// ---- 承認・却下メール ----
-async function decide(id, status){
-  const r = requests.find(x=>x.id===id);
-  if(!r) return;
-  const prev = r.status;
-  r.status = status;
-  const mr = myRequests.find(x=>x.id===id);
-  if(mr) mr.status = status;
-
-  if(status==='approved'&&prev!=='approved'){
-    balance.usedHours += r.hours;
-    if(r.type==='hour') balance.hourPoolUsed += r.hours;
-
-    // 申請者へ通知
-    if(r.approverEmail){
-      const subj = `【有給承認】${r.name} さんの申請が承認されました`;
-      const body = `${r.name} さんの有給申請が承認されました。\n\n種別：${r.typeLabel}\n期間：${r.date}${r.end!==r.date?' 〜 '+r.end:''}`;
-      await sendGmailSilent(userEmail, subj, body);
-    }
-  } else if(status==='rejected'&&prev==='approved'){
-    balance.usedHours -= r.hours;
-    if(r.type==='hour') balance.hourPoolUsed -= r.hours;
-  }
-
-  // 却下通知
-  if(status==='rejected'){
-    const subj = `【有給却下】${r.name} さんの申請が却下されました`;
-    const body = `${r.name} さんの有給申請が却下されました。\n\n種別：${r.typeLabel}\n期間：${r.date}${r.end!==r.date?' 〜 '+r.end:''}`;
-    await sendGmailSilent(userEmail, subj, body);
-  }
-
-  renderList(); renderBalance(); renderCalendar();
+    if(res.ok){ showMailStatus('success','✅ 申請を提出し、承認者にメールを送信しました'); }
+    else { const err=await res.json(); showMailStatus('error','⚠️ メール送信失敗：'+(err.error?.message||'不明なエラー')); }
+  } catch(e){ showMailStatus('error','⚠️ 通信エラー：'+e.message); }
 }
 
 async function sendGmailSilent(to, subject, body){
-  if(!accessToken) return;
+  if(!accessToken||!to) return;
   const message = [`To: ${to}`,`Subject: =?UTF-8?B?${btoa(unescape(encodeURIComponent(subject)))}?=`,'MIME-Version: 1.0','Content-Type: text/plain; charset=UTF-8','',body].join('\n');
   const encoded = btoa(unescape(encodeURIComponent(message))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send',{
@@ -505,6 +616,46 @@ async function sendGmailSilent(to, subject, body){
     headers:{'Authorization':'Bearer '+accessToken,'Content-Type':'application/json'},
     body:JSON.stringify({raw:encoded})
   }).catch(()=>{});
+}
+
+function showMailStatus(type, msg){
+  const el = document.getElementById('mail-status');
+  el.className='mail-status '+type;
+  el.textContent=msg;
+  el.style.display='block';
+}
+
+// ---- 承認・却下 ----
+async function decide(id, status){
+  const r = requests.find(x=>x.id===id);
+  if(!r) return;
+  const prev = r.status;
+  r.status = status;
+
+  const b = getBalance(r.email);
+  if(status==='approved'&&prev!=='approved'){
+    b.usedHours += r.hours;
+    if(r.type==='hour') b.hourPoolUsed += r.hours;
+
+    // 申請者 + 関係者全員に通知
+    const subj = `【有給承認】${r.name} さんの申請が承認されました`;
+    const body = `${r.name} さんの有給申請が承認されました。\n\n種別：${r.typeLabel}\n期間：${r.date}${r.end!==r.date?' 〜 '+r.end:''}`;
+    const recipients = [r.email, ...settings.ccList].filter(Boolean);
+    for(const to of recipients) await sendGmailSilent(to, subj, body);
+
+  } else if(status==='rejected'){
+    if(prev==='approved'){
+      b.usedHours -= r.hours;
+      if(r.type==='hour') b.hourPoolUsed -= r.hours;
+    }
+    // 申請者のみに通知
+    const subj = `【有給却下】${r.name} さんの申請が却下されました`;
+    const body = `${r.name} さんの有給申請が却下されました。\n\n種別：${r.typeLabel}\n期間：${r.date}${r.end!==r.date?' 〜 '+r.end:''}`;
+    await sendGmailSilent(r.email, subj, body);
+  }
+
+  saveRequestsData();
+  renderList(); renderBalance(); renderCalendar();
 }
 
 // ---- リスト ----
@@ -516,12 +667,12 @@ function badgeHtml(s){
 
 function renderList(){
   const myEl = document.getElementById('my-requests');
-  if(myRequests.length===0) myEl.innerHTML='<div class="empty">申請がありません</div>';
-  else myEl.innerHTML = myRequests.map(r=>`
+  if(requests.length===0) myEl.innerHTML='<div class="empty">申請がありません</div>';
+  else myEl.innerHTML = requests.map(r=>`
     <div class="list-item">
-      <div class="avatar">📋</div>
+      <div class="avatar">${r.initials}</div>
       <div class="meta">
-        <div class="name">${r.typeLabel}</div>
+        <div class="name">${r.name} — ${r.typeLabel}</div>
         <div class="dates">${r.date}${r.end&&r.end!==r.date?' 〜 '+r.end:''}</div>
       </div>
       ${badgeHtml(r.status)}
@@ -547,14 +698,13 @@ function renderList(){
 // ---- カレンダー ----
 function renderCalendar(){
   const now = new Date();
-  const year = now.getFullYear(), month = now.getMonth();
-  document.getElementById('cal-title').textContent = `${year}年${month+1}月`;
-  const cal = document.getElementById('calendar');
-  cal.innerHTML = DAYS.map(d=>`<div class="cal-header">${d}</div>`).join('');
-  const firstDay = new Date(year,month,1).getDay();
-  const daysInMonth = new Date(year,month+1,0).getDate();
-  const todayStr = now.toISOString().split('T')[0];
-
+  const year=now.getFullYear(), month=now.getMonth();
+  document.getElementById('cal-title').textContent=`${year}年${month+1}月`;
+  const cal=document.getElementById('calendar');
+  cal.innerHTML=DAYS.map(d=>`<div class="cal-header">${d}</div>`).join('');
+  const firstDay=new Date(year,month,1).getDay();
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  const todayStr=now.toISOString().split('T')[0];
   function hasLeave(ds,st){ return requests.some(r=>r.status===st&&ds>=r.date&&ds<=(r.end||r.date)); }
   for(let i=0;i<firstDay;i++) cal.innerHTML+='<div class="cal-day"></div>';
   for(let d=1;d<=daysInMonth;d++){
@@ -571,11 +721,11 @@ function renderCalendar(){
 
 // ---- ロール切替 ----
 function switchRole(){
-  isManager = document.getElementById('role-toggle').checked;
-  document.getElementById('apply-employee').style.display = isManager?'none':'block';
-  document.getElementById('apply-manager').style.display = isManager?'block':'none';
-  document.getElementById('list-employee').style.display = isManager?'none':'block';
-  document.getElementById('list-manager').style.display = isManager?'block':'none';
+  isManager=document.getElementById('role-toggle').checked;
+  document.getElementById('apply-employee').style.display=isManager?'none':'block';
+  document.getElementById('apply-manager').style.display=isManager?'block':'none';
+  document.getElementById('list-employee').style.display=isManager?'none':'block';
+  document.getElementById('list-manager').style.display=isManager?'block':'none';
   renderList();
 }
 
@@ -586,6 +736,7 @@ function showTab(t,btn){
   btn.classList.add('active');
   if(t==='calendar') renderCalendar();
   if(t==='list') renderList();
+  if(t==='settings') renderSettings();
 }
 </script>
 </body>

@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>有給申請アプリ</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Hiragino Sans','Yu Gothic',sans-serif;font-size:14px;color:#1a1a1a;background:#f5f5f5;min-height:100vh}
+.container{max-width:720px;margin:0 auto;padding:24px 16px}
+
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:16px}
+#login-screen h2{font-size:22px;font-weight:600}
+#login-screen p{color:#666;font-size:13px}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.topbar h1{font-size:18px;font-weight:600}
+.user-info{display:flex;align-items:center;gap:10px;font-size:13px;color:#555}
+.user-info img{width:28px;height:28px;border-radius:50%}
+.btn-logout{background:none;border:1px solid #ddd;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:#555}
+
+.role-switch{display:flex;align-items:center;gap:8px;font-size:13px;color:#555;margin-bottom:20px}
+.toggle{position:relative;width:44px;height:24px;display:inline-block}
+.toggle input{display:none}
+.slider-t{position:absolute;inset:0;background:#ccc;border-radius:24px;cursor:pointer;transition:.2s}
+.slider-t:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+input:checked+.slider-t{background:#1D9E75}
+input:checked+.slider-t:before{transform:translateX(20px)}
+
+.tabs{display:flex;gap:4px;border-bottom:1px solid #ddd;margin-bottom:20px}
+.tab{padding:8px 18px;font-size:14px;border:none;background:none;color:#888;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit}
+.tab.active{color:#1a1a1a;border-bottom-color:#1a1a1a;font-weight:500}
+
+.card{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:20px;margin-bottom:16px}
+.card h3{font-size:15px;font-weight:500;margin-bottom:14px}
+
+.form-row{margin-bottom:12px}
+label{display:block;font-size:12px;color:#666;margin-bottom:4px}
+input,select,textarea{width:100%;padding:8px 10px;font-size:14px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#1a1a1a;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#1D9E75}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
+.btn{padding:8px 18px;border-radius:6px;font-size:14px;cursor:pointer;font-family:inherit}
+.btn-primary{background:#1a1a1a;color:#fff;border:none}
+.btn-primary:hover{background:#333}
+.btn-outline{background:none;border:1px solid #ddd;color:#1a1a1a}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:6px;cursor:pointer;font-family:inherit}
+.btn-danger{background:none;border:1px solid #f0a0a0;color:#c00;border-radius:6px;padding:4px 8px;font-size:12px;cursor:pointer}
+
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-pending{background:#FAEEDA;color:#633806}
+.badge-approved{background:#EAF3DE;color:#27500A}
+.badge-rejected{background:#FCEBEB;color:#791F1F}
+
+.list-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0}
+.list-item:last-child{border-bottom:none}
+.avatar{width:34px;height:34px;border-radius:50%;background:#e8f4fd;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#2563eb;flex-shrink:0}
+.meta{flex:1}
+.meta .name{font-size:13px;font-weight:500}
+.meta .dates{font-size:12px;color:#888;margin-top:2px}
+.actions{display:flex;gap:6px}
+.btn-approve{background:none;border:1px solid #1D9E75;color:#0F6E56;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:inherit}
+.btn-reject{background:none;border:1px solid #D85A30;color:#993C1D;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-family:inherit}
+
+.balance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.bal-card{border-radius:8px;padding:12px;text-align:center}
+.bal-label{font-size:11px;color:#888;margin-bottom:4px}
+.bal-val{font-size:20px;font-weight:500}
+
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-header{text-align:center;font-size:11px;color:#888;padding:4px 0}
+.cal-day{text-align:center;padding:5px 2px;font-size:12px;border-radius:4px}
+.cal-day.off{color:#ccc}
+.cal-day.leave{background:#EAF3DE;color:#27500A;font-weight:500}
+.cal-day.pending-leave{background:#FAEEDA;color:#633806;font-weight:500}
+.cal-day.today{font-weight:700;border:1px solid #aaa}
+
+.info-box{background:#f8f8f8;border-radius:6px;padding:8px 12px;font-size:12px;color:#555;margin-bottom:12px}
+.notice{background:#f0f7ff;border-radius:8px;padding:10px 14px;font-size:13px;color:#555;margin-bottom:16px}
+.empty{text-align:center;color:#bbb;font-size:13px;padding:2rem 0}
+.section{display:none}.section.active{display:block}
+
+.mail-status{font-size:12px;padding:6px 12px;border-radius:6px;margin-top:8px;display:none}
+.mail-status.success{background:#EAF3DE;color:#27500A}
+.mail-status.error{background:#FCEBEB;color:#791F1F}
+
+.tag{display:inline-flex;align-items:center;gap:4px;background:#f0f0f0;border-radius:20px;padding:3px 10px;font-size:12px;margin:2px}
+.tag button{background:none;border:none;cursor:pointer;color:#888;font-size:14px;line-height:1;padding:0}
+
+.member-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;min-height:32px}
+.settings-saved{font-size:12px;color:#27500A;margin-top:8px;display:none}
+</style>
+</head>
+<body>
+
+<!-- ログイン画面 -->
+<div id="login-screen">
+  <h2>有給申請アプリ</h2>
+  <p>管理者アカウントでログインしてください</p>
+  <div id="g_id_onload"
+    data-client_id="248299412779-a34l0kevs4urfrg3468u3louv1n9tspf.apps.googleusercontent.com"
+    data-callback="handleCredentialResponse"
+    data-auto_prompt="false">
+  </div>
+  <div class="g_id_signin" data-type="standard" data-size="large" data-text="signin_with" data-locale="ja"></div>
+</div>
+
+<!-- メイン画面 -->
+<div id="main-screen" style="display:none">
+<div class="container">
+  <div class="topbar">
+    <h1>有給申請</h1>
+    <div class="user-info">
+      <img id="user-avatar" src="" alt="">
+      <span id="user-name"></span>
+      <button class="btn-logout" onclick="logout()">ログアウト</button>
+    </div>
+  </div>
+
+  <div class="role-switch">
+    <span>申請者</span>
+    <label class="toggle"><input type="checkbox" id="role-toggle" onchange="switchRole()"><span class="slider-t"></span></label>
+    <span>承認者</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('apply',this)">申請</button>
+    <button class="tab" onclick="showTab('list',this)">一覧</button>
+    <button class="tab" onclick="showTab('calendar',this)">カレンダー</button>
+    <button class="tab" onclick="showTab('settings',this)">設定</button>
+  </div>
+
+  <!-- 申請タブ -->
+  <div id="sec-apply" class="section active">
+    <div id="apply-employee">
+      <div class="card">
+        <h3>申請フォーム</h3>
+        <div class="form-row">
+          <label>申請者</label>
+          <select id="applicant-select" onchange="onApplicantChange()">
+            <option value="">-- 申請者を選択 --</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>申請者メールアドレス</label>
+          <input type="email" id="applicant-email" placeholder="自動入力されます" readonly style="background:#f8f8f8">
+        </div>
+        <div class="form-row">
+          <label>休暇種別</label>
+          <select id="leave-type" onchange="onTypeChange()">
+            <option value="full">1日有給</option>
+            <option value="half-am">半日有給（午前）</option>
+            <option value="half-pm">半日有給（午後）</option>
+            <option value="hour">時間休</option>
+          </select>
+        </div>
+        <div id="full-dates" class="form-row row2">
+          <div><label>開始日</label><input type="date" id="start-date" onchange="updatePreview()"></div>
+          <div><label>終了日</label><input type="date" id="end-date" onchange="updatePreview()"></div>
+        </div>
+        <div id="single-date-row" class="form-row" style="display:none">
+          <label>対象日</label>
+          <input type="date" id="single-date" onchange="updatePreview()">
+        </div>
+        <div id="hour-row" style="display:none;margin-bottom:12px">
+          <label>取得時間数（1〜3時間）</label>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="number" id="hour-count" min="1" max="3" value="1" style="width:80px" oninput="clampHours()">
+            <span style="font-size:13px;color:#888">時間</span>
+          </div>
+          <div id="hour-warn" style="font-size:12px;color:#993C1D;margin-top:4px;display:none">4時間以上は半日有給になります</div>
+        </div>
+        <div class="form-row">
+          <label>申請理由（任意）</label>
+          <textarea rows="2" id="reason" placeholder="例：私用のため" style="resize:vertical"></textarea>
+        </div>
+        <div id="deduction-preview" class="info-box" style="display:none"></div>
+        <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="submitRequest()">申請する（メール送信）</button>
+          <button class="btn btn-outline" onclick="clearForm()">クリア</button>
+        </div>
+        <div id="mail-status" class="mail-status"></div>
+      </div>
+
+      <div class="card">
+        <h3>有給残高</h3>
+        <div class="balance-grid" id="balance-display"></div>
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:12px;color:#888">時間休残枠</span>
+            <span style="font-size:12px;font-weight:500" id="hour-pool-text"></span>
+          </div>
+          <div style="background:#f0f0f0;border-radius:4px;height:6px;overflow:hidden">
+            <div id="hour-pool-bar" style="height:100%;background:#1D9E75;transition:.3s"></div>
+          </div>
+          <div style="font-size:11px;color:#aaa;margin-top:4px">上限40時間（日数から切り出し）</div>
+        </div>
+      </div>
+    </div>
+    <div id="apply-manager" style="display:none">
+      <div class="notice">承認者モードです。「一覧」タブから申請を承認・却下してください。</div>
+    </div>
+  </div>
+
+  <!-- 一覧タブ -->
+  <div id="sec-list" class="section">
+    <div id="list-employee" class="card">
+      <h3>申請履歴</h3>
+      <div id="my-requests"><div class="empty">申請がありません</div></div>
+    </div>
+    <div id="list-manager" class="card" style="display:none">
+      <h3>承認待ち申請</h3>
+      <div id="pending-requests"></div>
+    </div>
+  </div>
+
+  <!-- カレンダータブ -->
+  <div id="sec-calendar" class="section">
+    <div class="card">
+      <h3 id="cal-title" style="margin-bottom:8px">カレンダー</h3>
+      <div style="display:flex;gap:12px;margin-bottom:12px;font-size:12px">
+        <span><span style="display:inline-block;width:12px;height:12px;background:#EAF3DE;border-radius:2px;vertical-align:middle;margin-right:4px"></span>承認済み</span>
+        <span><span style="display:inline-block;width:12px;height:12px;background:#FAEEDA;border-radius:2px;vertical-align:middle;margin-right:4px"></span>申請中</span>
+      </div>
+      <div class="cal-grid" id="calendar"></div>
+    </div>
+  </div>
+
+  <!-- 設定タブ -->
+  <div id="sec-settings" class="section">
+
+    <!-- 承認者設定 -->
+    <div class="card">
+      <h3>承認者メールアドレス</h3>
+      <div class="form-row">
+        <label>承認者のメールアドレス（申請時に通知が届きます）</label>
+        <input type="email" id="setting-approver" placeholder="approver@example.com">
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="saveApprover()">保存</button>
+      <div id="approver-saved" class="settings-saved">✅ 保存しました</div>
+    </div>
+
+    <!-- 関係者設定 -->
+    <div class="card">
+      <h3>関係者メールアドレス（承認時に通知）</h3>
+      <div class="row2" style="margin-bottom:8px">
+        <input type="email" id="cc-email-input" placeholder="cc@example.com">
+        <button class="btn btn-outline btn-sm" onclick="addCcEmail()">追加</button>
+      </div>
+      <div class="member-list" id="cc-list"></div>
+      <div id="cc-saved" class="settings-saved">✅ 保存しました</div>
+    </div>
+
+    <!-- 社員リスト -->
+    <div class="card">
+      <h3>社員リスト</h3>
+      <div class="row3" style="margin-bottom:8px">
+        <input type="text" id="emp-name-input" placeholder="氏名">
+        <input type="email" id="emp-email-input" placeholder="メールアドレス">
+        <button class="btn btn-outline btn-sm" onclick="addEmployee()">追加</button>
+      </div>
+      <div id="emp-list"></div>
+      <div id="emp-saved" class="settings-saved">✅ 保存しました</div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+<script>
+const CLIENT_ID = '248299412779-a34l0kevs4urfrg3468u3louv1n9tspf.apps.googleusercontent.com';
+const DAYS = ['日','月','火','水','木','金','土'];
+const PLACEHOLDERS = {
+  full: '例：私用のため',
+  'half-am': '例：私用のため',
+  'half-pm': '例：私用のため',
+  hour: '例：8時〜9時（私用のため）　※取得時間帯を記入してください',
+};
+
+let accessToken = null;
+
+// 設定（localStorage）
+let settings = {
+  approver: '',
+  ccList: [],
+  employees: [], // [{name, email}]
+};
+
+// 残高・申請データ（localStorage）
+let balances = {}; // {email: {totalDays, usedHours, hourPoolUsed}}
+let requests = [];
+let nextId = 1;
+let isManager = false;
+let currentApplicantEmail = '';
+
+function loadSettings(){
+  const s = localStorage.getItem('yukyuu_settings');
+  if(s) settings = JSON.parse(s);
+  const r = localStorage.getItem('yukyuu_requests');
+  if(r){ const d=JSON.parse(r); requests=d.requests||[]; nextId=d.nextId||1; }
+  const b = localStorage.getItem('yukyuu_balances');
+  if(b) balances = JSON.parse(b);
+}
+
+function saveSettingsData(){
+  localStorage.setItem('yukyuu_settings', JSON.stringify(settings));
+}
+
+function saveRequestsData(){
+  localStorage.setItem('yukyuu_requests', JSON.stringify({requests, nextId}));
+  localStorage.setItem('yukyuu_balances', JSON.stringify(balances));
+}
+
+function getBalance(email){
+  if(!balances[email]) balances[email] = {totalDays:10, usedHours:0, hourPoolUsed:0};
+  return balances[email];
+}
+
+// ---- Google OAuth ----
+function handleCredentialResponse(response) {
+  const payload = parseJwt(response.credential);
+  document.getElementById('user-name').textContent = payload.name;
+  document.getElementById('user-avatar').src = payload.picture || '';
+
+  const client = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: 'https://www.googleapis.com/auth/gmail.send',
+    callback: (tokenResponse) => {
+      accessToken = tokenResponse.access_token;
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('main-screen').style.display = 'block';
+      loadSettings();
+      initDates();
+      renderSettings();
+      refreshApplicantSelect();
+      renderBalance();
+      renderList();
+      renderCalendar();
+    },
+  });
+  client.requestAccessToken();
+}
+
+function parseJwt(token) {
+  const base64 = token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+  return JSON.parse(decodeURIComponent(atob(base64).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+}
+
+function logout() {
+  google.accounts.id.disableAutoSelect();
+  accessToken = null;
+  document.getElementById('main-screen').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+// ---- 設定 ----
+function renderSettings(){
+  document.getElementById('setting-approver').value = settings.approver;
+  renderCcList();
+  renderEmpList();
+}
+
+function saveApprover(){
+  settings.approver = document.getElementById('setting-approver').value.trim();
+  saveSettingsData();
+  flash('approver-saved');
+}
+
+function addCcEmail(){
+  const v = document.getElementById('cc-email-input').value.trim();
+  if(!v) return;
+  if(!settings.ccList.includes(v)) settings.ccList.push(v);
+  saveSettingsData();
+  document.getElementById('cc-email-input').value='';
+  renderCcList();
+  flash('cc-saved');
+}
+
+function removeCc(email){
+  settings.ccList = settings.ccList.filter(e=>e!==email);
+  saveSettingsData();
+  renderCcList();
+}
+
+function renderCcList(){
+  document.getElementById('cc-list').innerHTML = settings.ccList.map(e=>
+    `<span class="tag">${e}<button onclick="removeCc('${e}')">×</button></span>`
+  ).join('') || '<span style="font-size:12px;color:#aaa">まだ追加されていません</span>';
+}
+
+function addEmployee(){
+  const name = document.getElementById('emp-name-input').value.trim();
+  const email = document.getElementById('emp-email-input').value.trim();
+  if(!name||!email){ alert('氏名とメールアドレスを入力してください'); return; }
+  if(settings.employees.find(e=>e.email===email)){ alert('既に登録されています'); return; }
+  settings.employees.push({name, email});
+  saveSettingsData();
+  document.getElementById('emp-name-input').value='';
+  document.getElementById('emp-email-input').value='';
+  renderEmpList();
+  refreshApplicantSelect();
+  flash('emp-saved');
+}
+
+function removeEmployee(email){
+  settings.employees = settings.employees.filter(e=>e.email!==email);
+  saveSettingsData();
+  renderEmpList();
+  refreshApplicantSelect();
+}
+
+function renderEmpList(){
+  const el = document.getElementById('emp-list');
+  if(settings.employees.length===0){ el.innerHTML='<div style="font-size:12px;color:#aaa;padding:8px 0">まだ登録されていません</div>'; return; }
+  el.innerHTML = settings.employees.map(e=>`
+    <div class="list-item">
+      <div class="avatar">${e.name.substring(0,2)}</div>
+      <div class="meta">
+        <div class="name">${e.name}</div>
+        <div class="dates">${e.email}</div>
+      </div>
+      <button class="btn-danger" onclick="removeEmployee('${e.email}')">削除</button>
+    </div>`).join('');
+}
+
+function refreshApplicantSelect(){
+  const sel = document.getElementById('applicant-select');
+  sel.innerHTML = '<option value="">-- 申請者を選択 --</option>';
+  settings.employees.forEach(e=>{
+    const opt = document.createElement('option');
+    opt.value = e.email;
+    opt.textContent = e.name;
+    sel.appendChild(opt);
+  });
+}
+
+function onApplicantChange(){
+  const email = document.getElementById('applicant-select').value;
+  currentApplicantEmail = email;
+  document.getElementById('applicant-email').value = email;
+  renderBalance();
+  updatePreview();
+}
+
+function flash(id){
+  const el = document.getElementById(id);
+  el.style.display='block';
+  setTimeout(()=>el.style.display='none', 2000);
+}
+
+// ---- 残高 ----
+function remainHours(){
+  const b = getBalance(currentApplicantEmail);
+  return b.totalDays * 8 - b.usedHours;
+}
+
+function fmtBalance(h){
+  const d=Math.floor(h/8), hr=h%8;
+  if(hr===0) return d+'日';
+  if(d===0) return hr+'時間';
+  return d+'日 + '+hr+'時間';
+}
+
+function renderBalance(){
+  const b = getBalance(currentApplicantEmail);
+  const remH = b.totalDays*8 - b.usedHours;
+  const usedH = b.usedHours;
+  const usedStr = usedH%8===0 ? Math.floor(usedH/8)+'日' : Math.floor(usedH/8)+'日 + '+usedH%8+'時間';
+  document.getElementById('balance-display').innerHTML = `
+    <div class="bal-card" style="background:#f8f8f8">
+      <div class="bal-label">付与日数</div>
+      <div class="bal-val">${b.totalDays}日</div>
+    </div>
+    <div class="bal-card" style="background:#f8f8f8">
+      <div class="bal-label">使用済み</div>
+      <div class="bal-val" style="font-size:16px">${usedStr}</div>
+    </div>
+    <div class="bal-card" style="background:#EAF3DE">
+      <div class="bal-label" style="color:#3B6D11">残高</div>
+      <div class="bal-val" style="color:#27500A;font-size:16px">${fmtBalance(remH)}</div>
+    </div>`;
+  const pr = 40 - b.hourPoolUsed;
+  document.getElementById('hour-pool-text').textContent = pr+'時間 / 40時間';
+  document.getElementById('hour-pool-bar').style.width = Math.round(Math.max(0,pr)/40*100)+'%';
+}
+
+// ---- フォーム ----
+function initDates(){
+  const today = new Date();
+  const fmt = d => d.toISOString().split('T')[0];
+  document.getElementById('start-date').value = fmt(today);
+  document.getElementById('end-date').value = fmt(today);
+  document.getElementById('single-date').value = fmt(today);
+}
+
+function onTypeChange(){
+  const t = document.getElementById('leave-type').value;
+  document.getElementById('full-dates').style.display = t==='full' ? 'grid' : 'none';
+  document.getElementById('single-date-row').style.display = t!=='full' ? 'block' : 'none';
+  document.getElementById('hour-row').style.display = t==='hour' ? 'block' : 'none';
+  document.getElementById('reason').placeholder = PLACEHOLDERS[t];
+  updatePreview();
+}
+
+function clampHours(){
+  const el = document.getElementById('hour-count');
+  const warn = document.getElementById('hour-warn');
+  if(parseInt(el.value)>=4){ warn.style.display='block'; el.value=3; }
+  else { warn.style.display='none'; }
+  updatePreview();
+}
+
+function updatePreview(){
+  const t = document.getElementById('leave-type').value;
+  const box = document.getElementById('deduction-preview');
+  const b = getBalance(currentApplicantEmail);
+  const remH = b.totalDays*8 - b.usedHours;
+  let msg='';
+  if(t==='full'){
+    const s=document.getElementById('start-date').value, e=document.getElementById('end-date').value;
+    if(s&&e&&s<=e){ const d=diffDays(s,e); msg=`${d}日消費 → 残: ${fmtBalance(Math.max(0,remH-d*8))}`; }
+  } else if(t==='half-am'||t==='half-pm'){
+    msg=`半日（4時間）消費 → 残: ${fmtBalance(Math.max(0,remH-4))}`;
+  } else {
+    const h=parseInt(document.getElementById('hour-count').value)||1;
+    msg=`${h}時間消費 → 残: ${fmtBalance(Math.max(0,remH-h))}`;
+    if(b.hourPoolUsed+h>40) msg+=' ⚠ 時間休上限超過';
+  }
+  if(msg){ box.style.display='block'; box.textContent='📋 '+msg; }
+  else { box.style.display='none'; }
+}
+
+function diffDays(s,e){ return Math.round((new Date(e)-new Date(s))/86400000)+1; }
+
+function clearForm(){
+  document.getElementById('applicant-select').value='';
+  document.getElementById('applicant-email').value='';
+  currentApplicantEmail='';
+  document.getElementById('reason').value='';
+  document.getElementById('hour-count').value=1;
+  document.getElementById('deduction-preview').style.display='none';
+  document.getElementById('mail-status').style.display='none';
+  renderBalance();
+}
+
+// ---- 申請送信 ----
+async function submitRequest(){
+  const applicantEmail = currentApplicantEmail;
+  const applicantName = document.getElementById('applicant-select').options[document.getElementById('applicant-select').selectedIndex]?.text || '';
+  if(!applicantEmail){ alert('申請者を選択してください'); return; }
+  if(!settings.approver){ alert('設定タブで承認者メールアドレスを登録してください'); return; }
+
+  const t = document.getElementById('leave-type').value;
+  const reason = document.getElementById('reason').value.trim();
+  const init = applicantName.substring(0,2);
+  const b = getBalance(applicantEmail);
+  const remH = b.totalDays*8 - b.usedHours;
+
+  let date,end,days,hours,typeLabel;
+  if(t==='full'){
+    date=document.getElementById('start-date').value;
+    end=document.getElementById('end-date').value;
+    if(!date||!end||date>end){ alert('日付を正しく入力してください'); return; }
+    days=diffDays(date,end); hours=days*8; typeLabel=days+'日有給';
+  } else if(t==='half-am'||t==='half-pm'){
+    date=end=document.getElementById('single-date').value;
+    if(!date){ alert('日付を入力してください'); return; }
+    days=0.5; hours=4; typeLabel=t==='half-am'?'半日有給（午前）':'半日有給（午後）';
+  } else {
+    date=end=document.getElementById('single-date').value;
+    if(!date){ alert('日付を入力してください'); return; }
+    const h=parseInt(document.getElementById('hour-count').value)||1;
+    if(h<1||h>3){ alert('時間休は1〜3時間で指定してください'); return; }
+    if(b.hourPoolUsed+h>40){ alert('時間休の上限（40時間）を超えます'); return; }
+    if(h>remH){ alert('残有給が不足しています'); return; }
+    days=0; hours=h; typeLabel=h+'時間休';
+  }
+  if(hours>remH){ alert('残有給が不足しています'); return; }
+
+  const req = {id:nextId++, name:applicantName, initials:init, email:applicantEmail, date, end, type:t, days, hours, reason, status:'pending', typeLabel};
+  requests.unshift(req);
+  saveRequestsData();
+
+  // 承認者へメール
+  const subject = `【有給申請】${applicantName} さんから申請が届いています`;
+  const body = `${applicantName} さんから有給申請が届きました。\n\n種別：${typeLabel}\n期間：${date}${end!==date?' 〜 '+end:''}\n理由：${reason||'記載なし'}\n\nアプリにログインして承認・却下してください。\nhttps://nisseisoumu0554265311-cell.github.io/yukyuu-app/`;
+  await sendGmail(settings.approver, subject, body);
+  renderList(); renderBalance();
+}
+
+// ---- Gmail送信 ----
+async function sendGmail(to, subject, body){
+  const statusEl = document.getElementById('mail-status');
+  if(!accessToken){ showMailStatus('error','ログインが必要です'); return; }
+  const message = [`To: ${to}`,`Subject: =?UTF-8?B?${btoa(unescape(encodeURIComponent(subject)))}?=`,'MIME-Version: 1.0','Content-Type: text/plain; charset=UTF-8','',body].join('\n');
+  const encoded = btoa(unescape(encodeURIComponent(message))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  try {
+    const res = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send',{
+      method:'POST',
+      headers:{'Authorization':'Bearer '+accessToken,'Content-Type':'application/json'},
+      body:JSON.stringify({raw:encoded})
+    });
+    if(res.ok){ showMailStatus('success','✅ 申請を提出し、承認者にメールを送信しました'); }
+    else { const err=await res.json(); showMailStatus('error','⚠️ メール送信失敗：'+(err.error?.message||'不明なエラー')); }
+  } catch(e){ showMailStatus('error','⚠️ 通信エラー：'+e.message); }
+}
+
+async function sendGmailSilent(to, subject, body){
+  if(!accessToken||!to) return;
+  const message = [`To: ${to}`,`Subject: =?UTF-8?B?${btoa(unescape(encodeURIComponent(subject)))}?=`,'MIME-Version: 1.0','Content-Type: text/plain; charset=UTF-8','',body].join('\n');
+  const encoded = btoa(unescape(encodeURIComponent(message))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  await fetch('https://gmail.googleapis.com/gmail/v1/users/me/messages/send',{
+    method:'POST',
+    headers:{'Authorization':'Bearer '+accessToken,'Content-Type':'application/json'},
+    body:JSON.stringify({raw:encoded})
+  }).catch(()=>{});
+}
+
+function showMailStatus(type, msg){
+  const el = document.getElementById('mail-status');
+  el.className='mail-status '+type;
+  el.textContent=msg;
+  el.style.display='block';
+}
+
+// ---- 承認・却下 ----
+async function decide(id, status){
+  const r = requests.find(x=>x.id===id);
+  if(!r) return;
+  const prev = r.status;
+  r.status = status;
+
+  const b = getBalance(r.email);
+  if(status==='approved'&&prev!=='approved'){
+    b.usedHours += r.hours;
+    if(r.type==='hour') b.hourPoolUsed += r.hours;
+
+    // 申請者 + 関係者全員に通知
+    const subj = `【有給承認】${r.name} さんの申請が承認されました`;
+    const body = `${r.name} さんの有給申請が承認されました。\n\n種別：${r.typeLabel}\n期間：${r.date}${r.end!==r.date?' 〜 '+r.end:''}`;
+    const recipients = [r.email, ...settings.ccList].filter(Boolean);
+    for(const to of recipients) await sendGmailSilent(to, subj, body);
+
+  } else if(status==='rejected'){
+    if(prev==='approved'){
+      b.usedHours -= r.hours;
+      if(r.type==='hour') b.hourPoolUsed -= r.hours;
+    }
+    // 申請者のみに通知
+    const subj = `【有給却下】${r.name} さんの申請が却下されました`;
+    const body = `${r.name} さんの有給申請が却下されました。\n\n種別：${r.typeLabel}\n期間：${r.date}${r.end!==r.date?' 〜 '+r.end:''}`;
+    await sendGmailSilent(r.email, subj, body);
+  }
+
+  saveRequestsData();
+  renderList(); renderBalance(); renderCalendar();
+}
+
+// ---- リスト ----
+function badgeHtml(s){
+  const m={pending:'申請中',approved:'承認済み',rejected:'却下'};
+  const c={pending:'badge-pending',approved:'badge-approved',rejected:'badge-rejected'};
+  return `<span class="badge ${c[s]}">${m[s]}</span>`;
+}
+
+function renderList(){
+  const myEl = document.getElementById('my-requests');
+  if(requests.length===0) myEl.innerHTML='<div class="empty">申請がありません</div>';
+  else myEl.innerHTML = requests.map(r=>`
+    <div class="list-item">
+      <div class="avatar">${r.initials}</div>
+      <div class="meta">
+        <div class="name">${r.name} — ${r.typeLabel}</div>
+        <div class="dates">${r.date}${r.end&&r.end!==r.date?' 〜 '+r.end:''}</div>
+      </div>
+      ${badgeHtml(r.status)}
+    </div>`).join('');
+
+  const pendingEl = document.getElementById('pending-requests');
+  const pending = requests.filter(r=>r.status==='pending');
+  if(pending.length===0) pendingEl.innerHTML='<div class="empty">承認待ちの申請はありません</div>';
+  else pendingEl.innerHTML = pending.map(r=>`
+    <div class="list-item">
+      <div class="avatar">${r.initials}</div>
+      <div class="meta">
+        <div class="name">${r.name} — ${r.typeLabel}</div>
+        <div class="dates">${r.date}${r.end&&r.end!==r.date?' 〜 '+r.end:''}${r.reason?' 　'+r.reason:''}</div>
+      </div>
+      <div class="actions">
+        <button class="btn-approve" onclick="decide(${r.id},'approved')">✓ 承認</button>
+        <button class="btn-reject" onclick="decide(${r.id},'rejected')">✕ 却下</button>
+      </div>
+    </div>`).join('');
+}
+
+// ---- カレンダー ----
+function renderCalendar(){
+  const now = new Date();
+  const year=now.getFullYear(), month=now.getMonth();
+  document.getElementById('cal-title').textContent=`${year}年${month+1}月`;
+  const cal=document.getElementById('calendar');
+  cal.innerHTML=DAYS.map(d=>`<div class="cal-header">${d}</div>`).join('');
+  const firstDay=new Date(year,month,1).getDay();
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  const todayStr=now.toISOString().split('T')[0];
+  function hasLeave(ds,st){ return requests.some(r=>r.status===st&&ds>=r.date&&ds<=(r.end||r.date)); }
+  for(let i=0;i<firstDay;i++) cal.innerHTML+='<div class="cal-day"></div>';
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dow=new Date(year,month,d).getDay();
+    let cls='cal-day';
+    if(dow===0||dow===6) cls+=' off';
+    if(hasLeave(ds,'approved')) cls+=' leave';
+    else if(hasLeave(ds,'pending')) cls+=' pending-leave';
+    if(ds===todayStr) cls+=' today';
+    cal.innerHTML+=`<div class="${cls}">${d}</div>`;
+  }
+}
+
+// ---- ロール切替 ----
+function switchRole(){
+  isManager=document.getElementById('role-toggle').checked;
+  document.getElementById('apply-employee').style.display=isManager?'none':'block';
+  document.getElementById('apply-manager').style.display=isManager?'block':'none';
+  document.getElementById('list-employee').style.display=isManager?'none':'block';
+  document.getElementById('list-manager').style.display=isManager?'block':'none';
+  renderList();
+}
+
+function showTab(t,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+t).classList.add('active');
+  btn.classList.add('active');
+  if(t==='calendar') renderCalendar();
+  if(t==='list') renderList();
+  if(t==='settings') renderSettings();
+}
+</script>
+</body>
+</html>
